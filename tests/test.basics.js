@@ -18,7 +18,7 @@ adapters.map(function (adapter) {
 
 
     it('Create a pouch', function (done) {
-      new PouchDB(dbs.name/*, {adapter: 'leveldb', db: Level}*/, function (err, db) {
+      new PouchDB(dbs.name, {adapter: 'leveldb', db: Level}, function (err, db) {
         should.not.exist(err);
         db.should.be.an.instanceof(PouchDB);
         done();
@@ -26,7 +26,6 @@ adapters.map(function (adapter) {
     });
 
     it('Create a pouch with a promise', function (done) {
-      debugger;
       new PouchDB(dbs.name, {adapter: 'leveldb', db: Level}).then(function (db) {
         db.should.be.an.instanceof(PouchDB);
         done();
@@ -58,7 +57,8 @@ adapters.map(function (adapter) {
     });
 
     it('destroy a pouch', function (done) {
-      new PouchDB(dbs.name, {adapter: 'leveldb', db: Level}, function (err, db) {
+      new PouchDB(dbs.name/*, {adapter: 'leveldb', db: Level}*/, function (err, db) {
+        debugger;
         db.destroy(function (err) {
           should.not.exist(err);
           done();
@@ -67,7 +67,8 @@ adapters.map(function (adapter) {
     });
 
     it('destroy a pouch, with a promise', function (done) {
-      new PouchDB(dbs.name, {adapter: 'leveldb', db: Level}, function (err, db) {
+      new PouchDB(dbs.name/*, {adapter: 'leveldb', db: Level}*/, function (err, db) {
+        debugger;
         db.destroy().then(function () {
           done();
         }, done);
