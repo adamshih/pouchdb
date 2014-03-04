@@ -44,6 +44,7 @@
     "sauce-connect-launcher": "0.2.2"
   },
   "scripts": {
+    "blah": "browserify node_modules/level-js/index.js -s Level -o bundle.js",
     "jshint": "jshint -c .jshintrc bin/ lib/ tests/*.js",
     "build-js": "browserify lib/index.js -s PouchDB -o dist/pouchdb-nightly.js",
     "uglify": "uglifyjs dist/pouchdb-nightly.js -mc > dist/pouchdb-nightly.min.js",
