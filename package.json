@@ -57,11 +57,8 @@
     "publish-site": "./bin/publish-site.sh"
   },
   "browser": {
-    "./deps/buffer": false,
     "request": false,
     "leveldown": false,
-    "crypto": false,
-    "bluebird": "lie",
-    "level-sublevel": false
+    "bluebird": "lie"
   }
 }
