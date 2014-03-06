@@ -41,7 +41,7 @@ adapters.map(function (adapter) {
 
     it('Remove a pouch', function (done) {
       new PouchDB(dbs.name, {adapter: 'leveldb', db: Level}, function (err, db) {
-        PouchDB.destroy(dbs, function (err, db) {
+        PouchDB.destroy(dbs, {adapter: 'leveldb', db: Level}, function (err, db) {
           should.not.exist(err);
           done();
         });
@@ -50,15 +50,14 @@ adapters.map(function (adapter) {
 
     it('Remove a pouch, with a promise', function (done) {
       new PouchDB(dbs.name, {adapter: 'leveldb', db: Level}, function (err, db) {
-        PouchDB.destroy(dbs).then(function () {
+        PouchDB.destroy(dbs, {adapter: 'leveldb', db: Level}).then(function () {
           done();
         }, done);
       });
     });
 
     it('destroy a pouch', function (done) {
-      new PouchDB(dbs.name/*, {adapter: 'leveldb', db: Level}*/, function (err, db) {
-        debugger;
+      new PouchDB(dbs.name, {adapter: 'leveldb', db: Level}, function (err, db) {
         db.destroy(function (err) {
           should.not.exist(err);
           done();
@@ -67,8 +66,7 @@ adapters.map(function (adapter) {
     });
 
     it('destroy a pouch, with a promise', function (done) {
-      new PouchDB(dbs.name/*, {adapter: 'leveldb', db: Level}*/, function (err, db) {
-        debugger;
+      new PouchDB(dbs.name, {adapter: 'leveldb', db: Level}, function (err, db) {
         db.destroy().then(function () {
           done();
         }, done);
@@ -532,8 +530,8 @@ adapters.map(function (adapter) {
           db2.put(doc2, function () {
             db.allDocs(function (err, docs) {
               docs.total_rows.should.equal(2);
-              PouchDB.destroy(dbs.name, function () {
-                db2 = new PouchDB(dbs.name, {adapter: 'leveldb', db: Level});
+              PouchDB.destroy(dbs.name, {adapter: 'leveldb', db: Level}, function () {
+                //db2 = new PouchDB(dbs.name, {adapter: 'leveldb', db: Level});
                 db2.get(doc._id, function (err, doc) {
                   err.status.should.equal(404);
                   done();

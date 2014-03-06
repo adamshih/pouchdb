@@ -69,7 +69,7 @@ testUtils.cleanup = function (dbs, done) {
   }
 
   dbs.forEach(function (db) {
-    PouchDB.destroy(db, dbDeleted);
+    PouchDB.destroy(db, {adapter: 'leveldb', db: Level}, dbDeleted);
   });
 };
 
