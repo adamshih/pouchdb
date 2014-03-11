@@ -1,6 +1,6 @@
 'use strict';
 
-var adapters = [/*'http', */'local'];
+var adapters = [/*'http'*/, 'local'];
 
 adapters.map(function (adapter) {
   describe('test.basics.js-' + adapter, function () {
@@ -18,7 +18,7 @@ adapters.map(function (adapter) {
 
 
     it('Create a pouch', function (done) {
-      new PouchDB(dbs.name, {adapter: 'leveldb', db: Level}, function (err, db) {
+      new PouchDB(dbs.name, function (err, db) {
         should.not.exist(err);
         db.should.be.an.instanceof(PouchDB);
         done();
@@ -26,7 +26,7 @@ adapters.map(function (adapter) {
     });
 
     it('Create a pouch with a promise', function (done) {
-      new PouchDB(dbs.name, {adapter: 'leveldb', db: Level}).then(function (db) {
+      new PouchDB(dbs.name).then(function (db) {
         db.should.be.an.instanceof(PouchDB);
         done();
       }, done);
@@ -40,8 +40,8 @@ adapters.map(function (adapter) {
     });
 
     it('Remove a pouch', function (done) {
-      new PouchDB(dbs.name, {adapter: 'leveldb', db: Level}, function (err, db) {
-        PouchDB.destroy(dbs, {adapter: 'leveldb', db: Level}, function (err, db) {
+      new PouchDB(dbs.name, function (err, db) {
+        PouchDB.destroy(dbs, function (err, db) {
           should.not.exist(err);
           done();
         });
@@ -49,15 +49,15 @@ adapters.map(function (adapter) {
     });
 
     it('Remove a pouch, with a promise', function (done) {
-      new PouchDB(dbs.name, {adapter: 'leveldb', db: Level}, function (err, db) {
-        PouchDB.destroy(dbs, {adapter: 'leveldb', db: Level}).then(function () {
+      new PouchDB(dbs.name, function (err, db) {
+        PouchDB.destroy(dbs).then(function () {
           done();
         }, done);
       });
     });
 
     it('destroy a pouch', function (done) {
-      new PouchDB(dbs.name, {adapter: 'leveldb', db: Level}, function (err, db) {
+      new PouchDB(dbs.name, function (err, db) {
         db.destroy(function (err) {
           should.not.exist(err);
           done();
@@ -66,7 +66,7 @@ adapters.map(function (adapter) {
     });
 
     it('destroy a pouch, with a promise', function (done) {
-      new PouchDB(dbs.name, {adapter: 'leveldb', db: Level}, function (err, db) {
+      new PouchDB(dbs.name, function (err, db) {
         db.destroy().then(function () {
           done();
         }, done);
@@ -74,7 +74,7 @@ adapters.map(function (adapter) {
     });
 
     it('Add a doc', function (done) {
-      var db = new PouchDB(dbs.name, {adapter: 'leveldb', db: Level});
+      var db = new PouchDB(dbs.name);
       db.post({test: 'somestuff'}, function (err, info) {
         should.not.exist(err);
         done();
@@ -82,14 +82,14 @@ adapters.map(function (adapter) {
     });
 
     it('Add a doc with a promise', function (done) {
-      var db = new PouchDB(dbs.name, {adapter: 'leveldb', db: Level});
+      var db = new PouchDB(dbs.name);
       db.post({test: 'somestuff'}).then(function (info) {
         done();
       }, done);
     });
 
     it('Modify a doc', function (done) {
-      var db = new PouchDB(dbs.name, {adapter: 'leveldb', db: Level});
+      var db = new PouchDB(dbs.name);
       db.post({test: 'somestuff'}, function (err, info) {
         db.put({
           _id: info.id,
@@ -104,7 +104,7 @@ adapters.map(function (adapter) {
     });
 
     it('Modify a doc with sugar syntax', function (done) {
-      var db = new PouchDB(dbs.name, {adapter: 'leveldb', db: Level});
+      var db = new PouchDB(dbs.name);
       db.post({test: 'somestuff'}, function (err, info) {
         db.put({another: 'test'}, info.id, info.rev, function (err, info2) {
           info.rev.should.not.equal(info2.rev);
@@ -118,7 +118,7 @@ adapters.map(function (adapter) {
     });
 
     it('Modify a doc with sugar syntax and omit the _id', function (done) {
-      var db = new PouchDB(dbs.name, {adapter: 'leveldb', db: Level});
+      var db = new PouchDB(dbs.name);
       db.post({test: 'somestuff'}, function (err, info) {
         db.put({another: 'test', _id: info.id}, info.rev, function (err, info2) {
           info.rev.should.not.equal(info2.rev);
@@ -132,7 +132,7 @@ adapters.map(function (adapter) {
     });
 
     it('Modify a doc with a promise', function (done) {
-      var db = new PouchDB(dbs.name, {adapter: 'leveldb', db: Level});
+      var db = new PouchDB(dbs.name);
       db.post({test: 'promisestuff'}).then(function (info) {
         return db.put({
           _id: info.id,
@@ -147,7 +147,7 @@ adapters.map(function (adapter) {
     });
 
     it('Read db id', function (done) {
-      var db = new PouchDB(dbs.name, {adapter: 'leveldb', db: Level});
+      var db = new PouchDB(dbs.name);
       db.id(function (err, id) {
         id.should.be.a('string');
         done(err);
@@ -155,7 +155,7 @@ adapters.map(function (adapter) {
     });
 
     it('Read db id with promise', function (done) {
-      var db = new PouchDB(dbs.name, {adapter: 'leveldb', db: Level});
+      var db = new PouchDB(dbs.name);
       db.id().then(function (id) {
         id.should.be.a('string');
         done();
@@ -163,21 +163,21 @@ adapters.map(function (adapter) {
     });
 
     it.skip('Close db', function (done) {
-      new PouchDB(dbs.name, {adapter: 'leveldb', db: Level}, function (err, db) {
+      new PouchDB(dbs.name, function (err, db) {
         db.close(done);
       });
     });
 
     it.skip('Close db with a promise', function (done) {
-      new PouchDB(dbs.name, {adapter: 'leveldb', db: Level}, function (err, db) {
+      new PouchDB(dbs.name, function (err, db) {
         db.close().then(done, done);
       });
     });
 
     it.skip('Read db id after closing Close', function (done) {
-      new PouchDB(dbs.name, {adapter: 'leveldb', db: Level}, function (err, db) {
+      new PouchDB(dbs.name, function (err, db) {
         db.close(function (error) {
-          db = new PouchDB(dbs.name, {adapter: 'leveldb', db: Level});
+          db = new PouchDB(dbs.name);
           db.id(function (id) {
             id.should.be.a('string');
             done();
@@ -187,7 +187,7 @@ adapters.map(function (adapter) {
     });
 
     it('Modify a doc with incorrect rev', function (done) {
-      var db = new PouchDB(dbs.name, {adapter: 'leveldb', db: Level});
+      var db = new PouchDB(dbs.name);
       db.post({ test: 'somestuff' }, function (err, info) {
         var nDoc = {
           _id: info.id,
@@ -202,7 +202,7 @@ adapters.map(function (adapter) {
     });
 
     it('Remove doc', function (done) {
-      var db = new PouchDB(dbs.name, {adapter: 'leveldb', db: Level});
+      var db = new PouchDB(dbs.name);
       db.post({ test: 'somestuff' }, function (err, info) {
         db.remove({
           test: 'somestuff',
@@ -218,7 +218,7 @@ adapters.map(function (adapter) {
     });
 
     it('Remove doc with a promise', function (done) {
-      var db = new PouchDB(dbs.name, {adapter: 'leveldb', db: Level});
+      var db = new PouchDB(dbs.name);
       db.post({test: 'someotherstuff'}).then(function (info) {
         return db.remove({
           test: 'someotherstuff',
@@ -236,7 +236,7 @@ adapters.map(function (adapter) {
     });
 
     it('Doc removal leaves only stub', function (done) {
-      var db = new PouchDB(dbs.name, {adapter: 'leveldb', db: Level});
+      var db = new PouchDB(dbs.name);
       db.put({_id: 'foo', value: 'test'}, function (err, res) {
         db.get('foo', function (err, doc) {
           db.remove(doc, function (err, res) {
@@ -254,7 +254,7 @@ adapters.map(function (adapter) {
     });
 
     it('Remove doc twice with specified id', function (done) {
-      var db = new PouchDB(dbs.name, {adapter: 'leveldb', db: Level});
+      var db = new PouchDB(dbs.name);
       db.put({_id: 'specifiedId', test: 'somestuff'}, function (err, info) {
         db.get('specifiedId', function (err, doc) {
           db.remove(doc, function (err, response) {
@@ -275,7 +275,7 @@ adapters.map(function (adapter) {
     });
 
     it('Remove doc, no callback', function (done) {
-      var db = new PouchDB(dbs.name, {adapter: 'leveldb', db: Level});
+      var db = new PouchDB(dbs.name);
       var changes = db.changes({
         continuous: true,
         include_docs: true,
@@ -298,7 +298,7 @@ adapters.map(function (adapter) {
     });
 
     it('Delete document without id', function (done) {
-      var db = new PouchDB(dbs.name, {adapter: 'leveldb', db: Level});
+      var db = new PouchDB(dbs.name);
       db.remove({test: 'ing'}, function (err) {
         should.exist(err);
         done();
@@ -306,7 +306,7 @@ adapters.map(function (adapter) {
     });
 
     it('Bulk docs', function (done) {
-      var db = new PouchDB(dbs.name, {adapter: 'leveldb', db: Level});
+      var db = new PouchDB(dbs.name);
       db.bulkDocs({
         docs: [
           { test: 'somestuff' },
@@ -321,7 +321,7 @@ adapters.map(function (adapter) {
     });
 
     it('Bulk docs with a promise', function (done) {
-      var db = new PouchDB(dbs.name, {adapter: 'leveldb', db: Level});
+      var db = new PouchDB(dbs.name);
       db.bulkDocs({
         docs: [
           { test: 'somestuff' },
@@ -336,7 +336,7 @@ adapters.map(function (adapter) {
     });
 
     it('Basic checks', function (done) {
-      var db = new PouchDB(dbs.name, {adapter: 'leveldb', db: Level});
+      var db = new PouchDB(dbs.name);
       db.info(function (err, info) {
         var updateSeq = info.update_seq;
         var doc = {_id: '0', a: 1, b: 1};
@@ -369,7 +369,7 @@ adapters.map(function (adapter) {
          '_fan': 'something smells delicious'},
         {'_bing': {'wha?': 'soda can'}}
       ];
-      var db = new PouchDB(dbs.name, {adapter: 'leveldb', db: Level});
+      var db = new PouchDB(dbs.name);
       db.bulkDocs({ docs: bad_docs }, function (err, res) {
         err.status.should.equal(500);
         err.name.should.equal('doc_validation');
@@ -387,7 +387,7 @@ adapters.map(function (adapter) {
       var complete = 0;
       var timer;
 
-      var db = new PouchDB(dbs.name, {adapter: 'leveldb', db: Level});
+      var db = new PouchDB(dbs.name);
 
       var bulkCallback = function (err, res) {
         should.not.exist(err);
@@ -407,7 +407,7 @@ adapters.map(function (adapter) {
     });
 
     it('Testing valid id', function (done) {
-      var db = new PouchDB(dbs.name, {adapter: 'leveldb', db: Level});
+      var db = new PouchDB(dbs.name);
       db.post({
         '_id': 123,
         test: 'somestuff'
@@ -419,7 +419,7 @@ adapters.map(function (adapter) {
 
     // TODO: https://github.com/daleharvey/pouchdb/issues/1461
     it.skip('Put doc without _id should fail', function (done) {
-      var db = new PouchDB(dbs.name, {adapter: 'leveldb', db: Level});
+      var db = new PouchDB(dbs.name);
       db.put({test: 'somestuff' }, function (err, info) {
         should.exist(err);
         done();
@@ -427,7 +427,7 @@ adapters.map(function (adapter) {
     });
 
     it.skip('Put doc with bad reserved id should fail', function (done) {
-      var db = new PouchDB(dbs.name, {adapter: 'leveldb', db: Level});
+      var db = new PouchDB(dbs.name);
       db.put({
         _id: '_i_test',
         test: 'somestuff'
@@ -439,9 +439,9 @@ adapters.map(function (adapter) {
     });
 
     it('update_seq persists', function (done) {
-      var db = new PouchDB(dbs.name, {adapter: 'leveldb', db: Level});
+      var db = new PouchDB(dbs.name);
       db.post({ test: 'somestuff' }, function (err, info) {
-        new PouchDB(dbs.name, {adapter: 'leveldb', db: Level}, function (err, db) {
+        new PouchDB(dbs.name, function (err, db) {
           db.info(function (err, info) {
             info.update_seq.should.not.equal(0);
             info.doc_count.should.equal(1);
@@ -453,7 +453,7 @@ adapters.map(function (adapter) {
 
     it('deletions persists', function (done) {
 
-      var db = new PouchDB(dbs.name, {adapter: 'leveldb', db: Level});
+      var db = new PouchDB(dbs.name);
       var doc = {_id: 'staticId', contents: 'stuff'};
 
       function writeAndDelete(cb) {
@@ -480,7 +480,7 @@ adapters.map(function (adapter) {
     });
 
     it('Error when document is not an object', function (done) {
-      var db = new PouchDB(dbs.name, {adapter: 'leveldb', db: Level});
+      var db = new PouchDB(dbs.name);
       var doc1 = [{ _id: 'foo' }, { _id: 'bar' }];
       var doc2 = 'this is not an object';
       var count = 5;
@@ -499,8 +499,8 @@ adapters.map(function (adapter) {
     });
 
     it('Test instance update_seq updates correctly', function (done) {
-      new PouchDB(dbs.name, {adapter: 'leveldb', db: Level}, function (err, db1) {
-        var db2 = new PouchDB(dbs.name, {adapter: 'leveldb', db: Level});
+      new PouchDB(dbs.name, function (err, db1) {
+        var db2 = new PouchDB(dbs.name);
         db1.post({ a: 'doc' }, function () {
           db1.info(function (err, db1Info) {
             db2.info(function (err, db2Info) {
@@ -522,16 +522,16 @@ adapters.map(function (adapter) {
     });
 
     it('Fail to fetch a doc after db was deleted', function (done) {
-      new PouchDB(dbs.name, {adapter: 'leveldb', db: Level}, function (err, db) {
-        var db2 = new PouchDB(dbs.name, {adapter: 'leveldb', db: Level});
+      new PouchDB(dbs.name, function (err, db) {
+        var db2 = new PouchDB(dbs.name);
         var doc = { _id: 'foodoc' };
         var doc2 = { _id: 'foodoc2' };
         db.put(doc, function () {
           db2.put(doc2, function () {
             db.allDocs(function (err, docs) {
               docs.total_rows.should.equal(2);
-              PouchDB.destroy(dbs.name, {adapter: 'leveldb', db: Level}, function () {
-                //db2 = new PouchDB(dbs.name, {adapter: 'leveldb', db: Level});
+              PouchDB.destroy(dbs.name, function () {
+                db2 = new PouchDB(dbs.name);
                 db2.get(doc._id, function (err, doc) {
                   err.status.should.equal(404);
                   done();
@@ -553,7 +553,7 @@ adapters.map(function (adapter) {
         { _id: '_underscored_id' }
       ];
       var num = docs.length;
-      var db = new PouchDB(dbs.name, {adapter: 'leveldb', db: Level});
+      var db = new PouchDB(dbs.name);
       docs.forEach(function (doc) {
         db.put(doc, function (err, info) {
           should.exist(err);
@@ -565,7 +565,7 @@ adapters.map(function (adapter) {
     });
 
     it('db.info should give correct name', function (done) {
-      var db = new PouchDB(dbs.name, {adapter: 'leveldb', db: Level});
+      var db = new PouchDB(dbs.name);
       db.info().then(function (info) {
         info.db_name.should.equal('test_basics');
         done();
