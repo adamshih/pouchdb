@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ "$LEVEL_BACKEND" == "leveljs" ]; then
+if [ "$LEVEL_BACKEND" != "" ]; then
     node_modules/.bin/browserify lib/index-levelalt.js \
       --require ./lib/index:./lib/index-levelalt.js \
       --standalone PouchDB \
