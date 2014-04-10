@@ -102,7 +102,20 @@ testUtils.cleanup = function (dbs, done) {
 
   try {
     if (global.localStorage) {
-      global.localStorage.clear();
+      var clearPrefixes = [
+        '_pouch__checkModernIdb',
+        '_pouch__websqldb',
+        '_pouch_test',
+        '_pouch_events_tests'
+      ];
+      clearPrefixes.forEach(function (prefix) {
+        Object.keys(global.localStorage)
+          .forEach(function (key) {
+            if (key.substring(0, prefix.length) === prefix) {
+              global.localStorage.removeItem(key);
+            }
+          });
+      });
     }
   } catch (e) {
     // firefox chrome environment, ignore
